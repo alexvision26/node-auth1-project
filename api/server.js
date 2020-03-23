@@ -5,17 +5,29 @@ const session = require("express-session");
 
 const usersRouter = require("../users/users-router");
 const authRouter = require("../auth/router");
-const restricted = require("../auth/restricted-middleware");
+// const restricted = require("../auth/restricted-middleware");
 
 const server = express();
 
-const sessionConfig = {};
+const sessionConfig = {
+  name: "user-session",
+  secret: "ThisIsSecret",
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+    secure: false,
+    httpOnly: true
+  },
+  resave: false,
+  saveUninitialized: true
+};
 
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+server.use(session(sessionConfig));
 
 server.use("/api/users", usersRouter);
+server.use("api/auth", authRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({ api: "running..." });

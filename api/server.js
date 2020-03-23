@@ -5,7 +5,7 @@ const session = require("express-session");
 
 const usersRouter = require("../users/users-router");
 const authRouter = require("../auth/router");
-// const restricted = require("../auth/restricted-middleware");
+const restricted = require("../auth/restricted-middleware");
 
 const server = express();
 
@@ -26,8 +26,8 @@ server.use(express.json());
 server.use(cors());
 server.use(session(sessionConfig));
 
-server.use("/api/users", usersRouter);
-server.use("api/auth", authRouter);
+server.use("/api/users", restricted, usersRouter);
+server.use("/api/auth", authRouter);
 
 server.get("/", (req, res) => {
   res.status(200).json({ api: "running..." });

@@ -6,9 +6,13 @@ module.exports = {
   add
 };
 
-function find() {}
+function find() {
+  return db("users").select("id", "username");
+}
 
-function findBy(filter) {}
+function findBy(filter) {
+  return db("users").where(filter);
+}
 
 async function add(user) {
   const [id] = await db("users").insert(user, "id");
